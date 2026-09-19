@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 
 # =========================================================
 # PAGE CONFIG
@@ -21,62 +20,224 @@ st.set_page_config(
 st.markdown("""
 <style>
 
+/* ---------- MAIN BACKGROUND ---------- */
+
 .stApp {
-    background: linear-gradient(135deg, #050816 0%, #0B1220 50%, #071A2B 100%);
+    background:
+        radial-gradient(circle at 80% 10%, rgba(0, 119, 255, 0.10), transparent 25%),
+        radial-gradient(circle at 10% 90%, rgba(0, 220, 255, 0.06), transparent 25%),
+        #050B16;
     color: white;
 }
 
-[data-testid="stSidebar"] {
-    background: #050B16;
+/* ---------- SIDEBAR ---------- */
+
+section[data-testid="stSidebar"] {
+    background:
+        linear-gradient(180deg, #030711 0%, #071322 100%);
+    border-right: 1px solid #16395D;
 }
 
+section[data-testid="stSidebar"] > div {
+    padding-top: 25px;
+}
+
+/* ---------- SIDEBAR TITLE ---------- */
+
+.sidebar-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #E8F7FF;
+    padding: 5px 5px 18px 5px;
+    border-bottom: 1px solid #17344F;
+    margin-bottom: 22px;
+}
+
+.sidebar-title span {
+    color: #38BDF8;
+}
+
+/* ---------- FILTER CARD ---------- */
+
+.filter-card {
+    background: linear-gradient(
+        145deg,
+        rgba(14, 38, 63, 0.85),
+        rgba(7, 19, 33, 0.90)
+    );
+
+    border: 1px solid #174B70;
+    border-radius: 14px;
+
+    padding: 13px 14px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.25),
+        inset 0 0 15px rgba(56,189,248,0.025);
+}
+
+.filter-title {
+    color: #8BD9FF;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.filter-icon {
+    color: #38BDF8;
+    font-size: 16px;
+}
+
+/* ---------- RADIO MENU ---------- */
+
+div[role="radiogroup"] label {
+    background: rgba(11, 28, 47, 0.75);
+    border: 1px solid #173B59;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 7px;
+    transition: 0.2s;
+}
+
+div[role="radiogroup"] label:hover {
+    border-color: #38BDF8;
+    background: rgba(20, 55, 82, 0.9);
+}
+
+/* ---------- SELECT BOX ---------- */
+
+div[data-baseweb="select"] > div {
+    background: #071525 !important;
+    border: 1px solid #24577A !important;
+    border-radius: 9px !important;
+    color: white !important;
+}
+
+div[data-baseweb="select"]:hover > div {
+    border-color: #38BDF8 !important;
+}
+
+/* ---------- REMOVE RED MULTISELECT LOOK ---------- */
+
+span[data-baseweb="tag"] {
+    background: #123B5A !important;
+    border: 1px solid #2B7AA5 !important;
+    color: #DDF6FF !important;
+    border-radius: 7px !important;
+}
+
+span[data-baseweb="tag"] svg {
+    color: #7DD3FC !important;
+}
+
+/* ---------- SLIDER ---------- */
+
+div[data-testid="stSlider"] div[role="slider"] {
+    background: #38BDF8 !important;
+}
+
+div[data-testid="stSlider"] [data-testid="stThumbValue"] {
+    color: #7DD3FC !important;
+}
+
+/* ---------- KPI CARDS ---------- */
+
 [data-testid="stMetric"] {
-    background: linear-gradient(135deg, #0B1B32, #102A43);
-    border: 1px solid #1D4E89;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(14, 43, 70, 0.95),
+            rgba(7, 24, 41, 0.95)
+        );
+
+    border: 1px solid #1C5A85;
+    border-radius: 16px;
     padding: 18px;
-    border-radius: 15px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.25);
 }
 
 [data-testid="stMetricValue"] {
-    color: #7DD3FC;
-}
-
-[data-testid="stMetricLabel"] {
-    color: #CBD5E1;
-}
-
-h1 {
-    color: #7DD3FC;
+    color: #6DD5FA;
     font-weight: 800;
 }
 
-h2, h3 {
-    color: #E2E8F0;
+[data-testid="stMetricLabel"] {
+    color: #B8D4E6;
 }
 
-div[data-testid="stDataFrame"] {
+/* ---------- HEADINGS ---------- */
+
+h1 {
+    color: #F1F9FF;
+    font-weight: 850;
+}
+
+h2 {
+    color: #E4F4FF;
+}
+
+h3 {
+    color: #BFEAFF;
+}
+
+/* ---------- CHART CONTAINER ---------- */
+
+.chart-box {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(8, 25, 43, 0.85),
+            rgba(4, 14, 26, 0.9)
+        );
+
+    border: 1px solid #173D5B;
+    border-radius: 16px;
+    padding: 8px;
+}
+
+/* ---------- DIVIDER ---------- */
+
+hr {
+    border-color: #17344F !important;
+}
+
+/* ---------- BUTTON ---------- */
+
+.stButton button {
+    background: linear-gradient(90deg, #075985, #0284C7);
+    color: white;
+    border: none;
+    border-radius: 9px;
+    font-weight: 700;
+}
+
+.stButton button:hover {
+    background: linear-gradient(90deg, #0284C7, #38BDF8);
+}
+
+/* ---------- DATAFRAME ---------- */
+
+[data-testid="stDataFrame"] {
+    border: 1px solid #173D5B;
     border-radius: 12px;
 }
 
-.stButton button {
-    border-radius: 10px;
+/* ---------- FOOTER ---------- */
+
+.footer {
+    text-align: center;
+    color: #6F91A8;
+    font-size: 13px;
+    padding: 25px;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# =========================================================
-# TITLE
-# =========================================================
-
-st.markdown(
-    "<h1>🏦 Bank Marketing Intelligence Dashboard</h1>",
-    unsafe_allow_html=True
-)
-
-st.markdown(
-    "### Customer Behaviour • Campaign Performance • Subscription Analytics"
-)
 
 # =========================================================
 # LOAD DATA
@@ -87,7 +248,6 @@ def load_data():
 
     df = pd.read_csv("Bank_Marketing.csv")
 
-    # Rename columns according to the project notebook
     rename_map = {
         "V1": "Age",
         "V2": "Job",
@@ -109,96 +269,183 @@ def load_data():
 
     df = df.rename(columns=rename_map)
 
-    # Subscription labels
     if "Class" in df.columns:
         df["Subscription Status"] = df["Class"].map({
             1: "Subscribed",
             2: "Not Subscribed"
         })
 
-    # Clean missing values
-    df = df.drop_duplicates()
-
-    return df
+    return df.drop_duplicates()
 
 
 df = load_data()
+
 
 # =========================================================
 # SIDEBAR
 # =========================================================
 
-st.sidebar.markdown("## 🏦 BANK ANALYTICS")
+with st.sidebar:
 
-st.sidebar.markdown("---")
+    st.markdown(
+        '<div class="sidebar-title">🏦 BANK <span>ANALYTICS</span></div>',
+        unsafe_allow_html=True
+    )
 
-menu = st.sidebar.radio(
-    "Select Dashboard",
-    [
-        "🏠 Executive Dashboard",
-        "👥 Customer Insights",
-        "📢 Campaign Analytics",
-        "🔎 Data Explorer"
-    ]
-)
+    st.markdown("### 📊 Select Dashboard")
 
-st.sidebar.markdown("---")
+    menu = st.radio(
+        "Dashboard",
+        [
+            "🏠 Executive Dashboard",
+            "👥 Customer Insights",
+            "📢 Campaign Analytics",
+            "🔎 Data Explorer"
+        ],
+        label_visibility="collapsed"
+    )
 
-st.sidebar.markdown("### 🎛️ Filters")
+    st.markdown("---")
 
-# =========================================================
-# FILTERS
-# =========================================================
+    st.markdown("### 🎛️ Smart Filters")
 
-filtered_df = df.copy()
+    # =====================================================
+    # JOB FILTER
+    # =====================================================
 
-# Job filter
-if "Job" in df.columns:
+    st.markdown("""
+    <div class="filter-card">
+        <div class="filter-title">
+            💼 JOB CATEGORY
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    jobs = st.sidebar.multiselect(
+    job_options = ["All Jobs"] + sorted(
+        df["Job"].dropna().unique().tolist()
+    )
+
+    selected_job = st.selectbox(
         "Job",
-        sorted(df["Job"].dropna().unique()),
-        default=sorted(df["Job"].dropna().unique())
+        job_options,
+        label_visibility="collapsed"
     )
 
-    if jobs:
-        filtered_df = filtered_df[
-            filtered_df["Job"].isin(jobs)
-        ]
+    # =====================================================
+    # EDUCATION FILTER
+    # =====================================================
 
-# Education filter
-if "Education" in df.columns:
+    st.markdown("""
+    <div class="filter-card">
+        <div class="filter-title">
+            🎓 EDUCATION LEVEL
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    education = st.sidebar.multiselect(
+    education_options = ["All Education"] + sorted(
+        df["Education"].dropna().unique().tolist()
+    )
+
+    selected_education = st.selectbox(
         "Education",
-        sorted(df["Education"].dropna().unique()),
-        default=sorted(df["Education"].dropna().unique())
+        education_options,
+        label_visibility="collapsed"
     )
 
-    if education:
-        filtered_df = filtered_df[
-            filtered_df["Education"].isin(education)
-        ]
+    # =====================================================
+    # MARITAL FILTER
+    # =====================================================
 
-# Age filter
-if "Age" in df.columns:
+    st.markdown("""
+    <div class="filter-card">
+        <div class="filter-title">
+            👥 MARITAL STATUS
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    marital_options = ["All Status"] + sorted(
+        df["Marital Status"].dropna().unique().tolist()
+    )
+
+    selected_marital = st.selectbox(
+        "Marital",
+        marital_options,
+        label_visibility="collapsed"
+    )
+
+    # =====================================================
+    # AGE FILTER
+    # =====================================================
+
+    st.markdown("""
+    <div class="filter-card">
+        <div class="filter-title">
+            🎂 AGE RANGE
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
     min_age = int(df["Age"].min())
     max_age = int(df["Age"].max())
 
-    age_range = st.sidebar.slider(
-        "Age Range",
-        min_age,
-        max_age,
-        (min_age, max_age)
+    age_range = st.slider(
+        "Age",
+        min_value=min_age,
+        max_value=max_age,
+        value=(min_age, max_age),
+        label_visibility="collapsed"
     )
 
+    st.markdown("---")
+
+    st.caption("✨ Smart filtering • Interactive analytics")
+
+
+# =========================================================
+# APPLY FILTERS
+# =========================================================
+
+filtered_df = df.copy()
+
+if selected_job != "All Jobs":
     filtered_df = filtered_df[
-        filtered_df["Age"].between(
-            age_range[0],
-            age_range[1]
-        )
+        filtered_df["Job"] == selected_job
     ]
+
+if selected_education != "All Education":
+    filtered_df = filtered_df[
+        filtered_df["Education"] == selected_education
+    ]
+
+if selected_marital != "All Status":
+    filtered_df = filtered_df[
+        filtered_df["Marital Status"] == selected_marital
+    ]
+
+filtered_df = filtered_df[
+    filtered_df["Age"].between(
+        age_range[0],
+        age_range[1]
+    )
+]
+
+
+# =========================================================
+# HEADER
+# =========================================================
+
+st.markdown(
+    "# 🏦 Bank Marketing Intelligence Dashboard"
+)
+
+st.markdown(
+    "### Customer Behaviour  •  Campaign Performance  •  Subscription Analytics"
+)
+
+st.markdown("---")
+
 
 # =========================================================
 # COMMON METRICS
@@ -228,15 +475,15 @@ avg_balance = (
     if total_customers > 0 else 0
 )
 
+
 # =========================================================
-# 1. EXECUTIVE DASHBOARD
+# EXECUTIVE DASHBOARD
 # =========================================================
 
 if menu == "🏠 Executive Dashboard":
 
     st.markdown("## 📊 Executive Overview")
 
-    # KPI ROW
     c1, c2, c3, c4 = st.columns(4)
 
     c1.metric(
@@ -262,34 +509,32 @@ if menu == "🏠 Executive Dashboard":
     st.markdown("---")
 
     # =====================================================
-    # SUBSCRIPTION DONUT
+    # DONUT
     # =====================================================
 
     col1, col2 = st.columns(2)
 
     with col1:
 
-        subscription_count = (
+        st.markdown("### 🍩 Subscription Distribution")
+
+        sub_data = (
             filtered_df["Subscription Status"]
             .value_counts()
             .reset_index()
         )
 
-        subscription_count.columns = [
-            "Status",
-            "Count"
-        ]
+        sub_data.columns = ["Status", "Count"]
 
         fig = px.pie(
-            subscription_count,
+            sub_data,
             names="Status",
             values="Count",
-            hole=0.65,
-            title="Subscription Distribution",
+            hole=0.68,
             color="Status",
             color_discrete_map={
-                "Subscribed": "#0B3D91",
-                "Not Subscribed": "#8B0000"
+                "Subscribed": "#087EA4",
+                "Not Subscribed": "#C026D3"
             }
         )
 
@@ -297,7 +542,7 @@ if menu == "🏠 Executive Dashboard":
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
             font_color="white",
-            legend_title="Status"
+            legend_title=""
         )
 
         st.plotly_chart(
@@ -306,19 +551,24 @@ if menu == "🏠 Executive Dashboard":
         )
 
     # =====================================================
-    # JOB PERFORMANCE
+    # JOB
     # =====================================================
 
     with col2:
 
+        st.markdown("### 💼 Subscription Rate by Job")
+
         job_rate = (
             filtered_df
             .groupby("Job")["Class"]
-            .apply(lambda x: (x == 1).mean() * 100)
-            .reset_index(name="Subscription Rate")
+            .apply(
+                lambda x: (x == 1).mean() * 100
+            )
+            .reset_index(
+                name="Subscription Rate"
+            )
             .sort_values(
-                "Subscription Rate",
-                ascending=False
+                "Subscription Rate"
             )
         )
 
@@ -327,8 +577,11 @@ if menu == "🏠 Executive Dashboard":
             x="Subscription Rate",
             y="Job",
             orientation="h",
-            title="Subscription Rate by Job",
             text_auto=".1f"
+        )
+
+        fig.update_traces(
+            marker_color="#38BDF8"
         )
 
         fig.update_layout(
@@ -336,7 +589,8 @@ if menu == "🏠 Executive Dashboard":
             plot_bgcolor="rgba(0,0,0,0)",
             font_color="white",
             xaxis_title="Subscription Rate (%)",
-            yaxis_title=""
+            yaxis_title="",
+            showlegend=False
         )
 
         st.plotly_chart(
@@ -345,22 +599,21 @@ if menu == "🏠 Executive Dashboard":
         )
 
     # =====================================================
-    # AGE DISTRIBUTION
+    # AGE
     # =====================================================
 
-    st.markdown("## 👤 Customer Age Analysis")
+    st.markdown("### 👤 Customer Age Distribution")
 
     fig = px.histogram(
         filtered_df,
         x="Age",
         color="Subscription Status",
         nbins=30,
-        title="Age Distribution by Subscription Status",
         barmode="overlay",
         opacity=0.75,
         color_discrete_map={
-            "Subscribed": "#0B3D91",
-            "Not Subscribed": "#8B0000"
+            "Subscribed": "#0EA5E9",
+            "Not Subscribed": "#C026D3"
         }
     )
 
@@ -379,16 +632,12 @@ if menu == "🏠 Executive Dashboard":
 
 
 # =========================================================
-# 2. CUSTOMER INSIGHTS
+# CUSTOMER INSIGHTS
 # =========================================================
 
 elif menu == "👥 Customer Insights":
 
-    st.markdown("## 👥 Customer Behaviour Analysis")
-
-    # =====================================================
-    # MARITAL STATUS
-    # =====================================================
+    st.markdown("## 👥 Customer Behaviour Insights")
 
     col1, col2 = st.columns(2)
 
@@ -400,7 +649,9 @@ elif menu == "👥 Customer Insights":
                 ["Marital Status", "Subscription Status"]
             )
             .size()
-            .reset_index(name="Customers")
+            .reset_index(
+                name="Customers"
+            )
         )
 
         fig = px.bar(
@@ -411,8 +662,8 @@ elif menu == "👥 Customer Insights":
             barmode="group",
             title="Marital Status vs Subscription",
             color_discrete_map={
-                "Subscribed": "#0B3D91",
-                "Not Subscribed": "#8B0000"
+                "Subscribed": "#0EA5E9",
+                "Not Subscribed": "#C026D3"
             }
         )
 
@@ -427,25 +678,29 @@ elif menu == "👥 Customer Insights":
             use_container_width=True
         )
 
-    # =====================================================
-    # EDUCATION
-    # =====================================================
-
     with col2:
 
         education_rate = (
             filtered_df
             .groupby("Education")["Class"]
-            .apply(lambda x: (x == 1).mean() * 100)
-            .reset_index(name="Subscription Rate")
+            .apply(
+                lambda x: (x == 1).mean() * 100
+            )
+            .reset_index(
+                name="Subscription Rate"
+            )
         )
 
         fig = px.bar(
             education_rate,
             x="Education",
             y="Subscription Rate",
-            title="Education vs Subscription Rate",
-            text_auto=".1f"
+            text_auto=".1f",
+            title="Education vs Subscription"
+        )
+
+        fig.update_traces(
+            marker_color="#8B5CF6"
         )
 
         fig.update_layout(
@@ -460,7 +715,7 @@ elif menu == "👥 Customer Insights":
         )
 
     # =====================================================
-    # LOANS
+    # LOAN ANALYSIS
     # =====================================================
 
     st.markdown("## 💳 Loan Behaviour")
@@ -475,7 +730,9 @@ elif menu == "👥 Customer Insights":
                 ["Housing loan", "Subscription Status"]
             )
             .size()
-            .reset_index(name="Customers")
+            .reset_index(
+                name="Customers"
+            )
         )
 
         fig = px.bar(
@@ -506,7 +763,9 @@ elif menu == "👥 Customer Insights":
                 ["Personal loan", "Subscription Status"]
             )
             .size()
-            .reset_index(name="Customers")
+            .reset_index(
+                name="Customers"
+            )
         )
 
         fig = px.bar(
@@ -529,19 +788,17 @@ elif menu == "👥 Customer Insights":
             use_container_width=True
         )
 
-    # =====================================================
-    # BALANCE VS SUBSCRIPTION
-    # =====================================================
+    # BALANCE
 
     fig = px.box(
         filtered_df,
         x="Subscription Status",
         y="Average balance",
         color="Subscription Status",
-        title="Balance Distribution by Subscription Status",
+        title="Balance Distribution by Subscription",
         color_discrete_map={
-            "Subscribed": "#0B3D91",
-            "Not Subscribed": "#8B0000"
+            "Subscribed": "#0EA5E9",
+            "Not Subscribed": "#C026D3"
         }
     )
 
@@ -558,34 +815,39 @@ elif menu == "👥 Customer Insights":
 
 
 # =========================================================
-# 3. CAMPAIGN ANALYTICS
+# CAMPAIGN ANALYTICS
 # =========================================================
 
 elif menu == "📢 Campaign Analytics":
 
-    st.markdown("## 📢 Marketing Campaign Analytics")
-
-    # =====================================================
-    # CONTACT METHOD
-    # =====================================================
+    st.markdown("## 📢 Campaign Performance")
 
     col1, col2 = st.columns(2)
 
+    # CONTACT
     with col1:
 
         contact_rate = (
             filtered_df
             .groupby("Contact")["Class"]
-            .apply(lambda x: (x == 1).mean() * 100)
-            .reset_index(name="Conversion Rate")
+            .apply(
+                lambda x: (x == 1).mean() * 100
+            )
+            .reset_index(
+                name="Conversion Rate"
+            )
         )
 
         fig = px.bar(
             contact_rate,
             x="Contact",
             y="Conversion Rate",
-            title="Conversion Rate by Contact Method",
-            text_auto=".1f"
+            text_auto=".1f",
+            title="Conversion Rate by Contact"
+        )
+
+        fig.update_traces(
+            marker_color="#06B6D4"
         )
 
         fig.update_layout(
@@ -599,10 +861,7 @@ elif menu == "📢 Campaign Analytics":
             use_container_width=True
         )
 
-    # =====================================================
-    # MONTHLY PERFORMANCE
-    # =====================================================
-
+    # MONTH
     with col2:
 
         month_order = [
@@ -614,9 +873,13 @@ elif menu == "📢 Campaign Analytics":
         month_rate = (
             filtered_df
             .groupby("Contact month")["Class"]
-            .apply(lambda x: (x == 1).mean() * 100)
+            .apply(
+                lambda x: (x == 1).mean() * 100
+            )
             .reindex(month_order)
-            .reset_index(name="Subscription Rate")
+            .reset_index(
+                name="Subscription Rate"
+            )
         )
 
         fig = px.line(
@@ -625,6 +888,11 @@ elif menu == "📢 Campaign Analytics":
             y="Subscription Rate",
             markers=True,
             title="Monthly Subscription Rate"
+        )
+
+        fig.update_traces(
+            line_color="#A855F7",
+            marker_color="#38BDF8"
         )
 
         fig.update_layout(
@@ -638,11 +906,9 @@ elif menu == "📢 Campaign Analytics":
             use_container_width=True
         )
 
-    # =====================================================
     # CAMPAIGN CONTACTS
-    # =====================================================
 
-    st.markdown("## 📞 Campaign Contact Analysis")
+    st.markdown("### 📞 Campaign Contact vs Conversion")
 
     campaign = (
         filtered_df
@@ -665,44 +931,15 @@ elif menu == "📢 Campaign Analytics":
         x="Campaign contacts",
         y="Conversion Rate",
         size="Customers",
-        title="Campaign Contacts vs Conversion Rate",
-        hover_data=["Customers", "Subscribed"]
+        hover_data=[
+            "Customers",
+            "Subscribed"
+        ],
+        title="Campaign Contacts vs Conversion Rate"
     )
 
-    fig.update_layout(
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        font_color="white",
-        xaxis_title="Number of Campaign Contacts",
-        yaxis_title="Conversion Rate (%)"
-    )
-
-    st.plotly_chart(
-        fig,
-        use_container_width=True
-    )
-
-    # =====================================================
-    # PREVIOUS CAMPAIGN RESULT
-    # =====================================================
-
-    previous_rate = (
-        filtered_df
-        .groupby("Previous result")["Class"]
-        .apply(lambda x: (x == 1).mean() * 100)
-        .reset_index(name="Subscription Rate")
-        .sort_values(
-            "Subscription Rate",
-            ascending=False
-        )
-    )
-
-    fig = px.bar(
-        previous_rate,
-        x="Previous result",
-        y="Subscription Rate",
-        title="Previous Campaign Outcome vs Current Subscription",
-        text_auto=".1f"
+    fig.update_traces(
+        marker_color="#38BDF8"
     )
 
     fig.update_layout(
@@ -718,94 +955,67 @@ elif menu == "📢 Campaign Analytics":
 
 
 # =========================================================
-# 4. DATA EXPLORER
+# DATA EXPLORER
 # =========================================================
 
 elif menu == "🔎 Data Explorer":
 
     st.markdown("## 🔎 Interactive Data Explorer")
 
-    st.write(
-        "Use the controls below to explore the bank marketing dataset."
-    )
-
-    # =====================================================
-    # COLUMN SELECTOR
-    # =====================================================
-
-    columns = st.multiselect(
-        "Select columns to display",
+    selected_columns = st.multiselect(
+        "Select columns",
         df.columns.tolist(),
         default=df.columns.tolist()
     )
 
-    if columns:
+    if selected_columns:
 
         st.dataframe(
-            filtered_df[columns],
+            filtered_df[selected_columns],
             use_container_width=True,
             height=500
         )
 
-    # =====================================================
-    # DOWNLOAD
-    # =====================================================
-
-    csv = filtered_df.to_csv(index=False)
-
-    st.download_button(
-        label="⬇️ Download Filtered Dataset",
-        data=csv,
-        file_name="bank_marketing_filtered.csv",
-        mime="text/csv"
-    )
-
-    st.markdown("---")
-
-    # =====================================================
-    # DATA SUMMARY
-    # =====================================================
-
-    st.markdown("## 📋 Dataset Summary")
+    st.markdown("### 📋 Dataset Information")
 
     c1, c2, c3 = st.columns(3)
 
     c1.metric(
         "Rows",
-        f"{filtered_df.shape[0]:,}"
+        f"{len(filtered_df):,}"
     )
 
     c2.metric(
         "Columns",
-        filtered_df.shape[1]
+        len(filtered_df.columns)
     )
 
     c3.metric(
-        "Duplicate Rows",
-        filtered_df.duplicated().sum()
+        "Missing Values",
+        int(filtered_df.isnull().sum().sum())
     )
 
-    st.markdown("### Data Types")
+    csv = filtered_df.to_csv(index=False)
 
-    dtype_df = pd.DataFrame({
-        "Column": filtered_df.columns,
-        "Data Type": filtered_df.dtypes.astype(str).values,
-        "Missing Values": filtered_df.isnull().sum().values
-    })
-
-    st.dataframe(
-        dtype_df,
-        use_container_width=True
+    st.download_button(
+        "⬇️ Download Filtered Data",
+        csv,
+        "bank_marketing_filtered.csv",
+        "text/csv"
     )
+
 
 # =========================================================
 # FOOTER
 # =========================================================
 
-st.markdown("---")
-
 st.markdown(
-    "<center>🏦 Bank Marketing & Customer Behaviour Analysis | "
-    "Interactive Streamlit Dashboard</center>",
+    """
+    <div class="footer">
+        🏦 Bank Marketing & Customer Behaviour Analysis
+        <br>
+        Interactive Business Intelligence Dashboard
+    </div>
+    """,
     unsafe_allow_html=True
 )
